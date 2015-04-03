@@ -40,9 +40,9 @@ PROMETHEUS_OPTS env variable:
 To customize the config template itself or the console templates,
 create a new directory with the following files (all optional):
 
-  ./prometheus.conf.tmpl: the prometheus config consul template
-  ./prometheus/consoles: prometheus console templates
-  ./prometheus/console_libraries: prometheus console libraries
+    ./prometheus.conf.tmpl: the prometheus config consul template
+    ./prometheus/consoles: prometheus console templates
+    ./prometheus/console_libraries: prometheus console libraries
 
 Now create a Dockerfile with only `FROM dckr/prometheus-consul` in it.
 Building this image will replace the provided template with the
