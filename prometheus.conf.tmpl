@@ -1,0 +1,118 @@
+# Global default settings.
+global {
+  scrape_interval: "15s"     # By default, scrape targets every 15 seconds.
+  evaluation_interval: "15s" # By default, evaluate rules every 15 seconds.
+
+  # Load and evaluate rules in this file every 'evaluation_interval' seconds. This field may be repeated.
+  # rule_file: "/etc/prometheus.rules"
+}
+
+# A job definition containing exactly one endpoint to scrape: Here it's prometheus itself.
+job: {
+  # The job name is added as a label `job={job-name}` to any timeseries scraped from this job.
+  name: "prometheus"
+  # Override the global default and scrape targets from this job every 5 seconds.
+  scrape_interval: "30s"
+
+  # Let's define a group of targets to scrape for this job. In this case, only one.
+  target_group: {
+    # These endpoints are scraped via HTTP.
+    target: "http://localhost:9090/metrics"
+  }
+}
+
+job: {
+  name: "node"
+  scrape_interval: "60s"
+  {{ range $tag, $services := service "prometheus-node-exporter" "any" | byTag }}{{ if $tag }}
+  target_group: {
+    labels: {
+      label: {
+        name:  "tag"
+        value: "{{ $tag }}"
+      }
+    }
+    {{ range $services }}target: "http://{{ .Address }}:{{ .Port }}/metrics"
+    {{ end }}
+  }{{ end }}{{ end }}
+}
+
+job: {
+  name: "container"
+  scrape_interval: "60s"
+  {{ range $tag, $services := service "prometheus-container-exporter" "any" | byTag }}{{ if $tag }}
+  target_group: {
+    labels: {
+      label: {
+        name:  "tag"
+        value: "{{ $tag }}"
+      }
+    }
+    {{ range $services }}target: "http://{{ .Address }}:{{ .Port }}/metrics"
+    {{ end }}
+  }{{ end }}{{ end }}
+}
+
+job: {
+  name: "haproxy"
+  scrape_interval: "60s"
+  {{ range $tag, $services := service "prometheus-haproxy-exporter" "any" | byTag }}{{ if $tag }}
+  target_group: {
+    labels: {
+      label: {
+        name:  "tag"
+        value: "{{ $tag }}"
+      }
+    }
+    {{ range $services }}target: "http://{{ .Address }}:{{ .Port }}/metrics"
+    {{ end }}
+  }{{ end }}{{ end }}
+}
+
+job: {
+  name: "cloudwatch"
+  scrape_interval: "60s"
+  {{ range $tag, $services := service "prometheus-cloudwatch-exporter" "any" | byTag }}{{ if $tag }}
+  target_group: {
+    labels: {
+      label: {
+        name:  "tag"
+        value: "{{ $tag }}"
+      }
+    }
+    {{ range $services }}target: "http://{{ .Address }}:{{ .Port }}/metrics"
+    {{ end }}
+  }{{ end }}{{ end }}
+}
+
+job: {
+  name: "pushgateway"
+  scrape_interval: "60s"
+  {{ range $tag, $services := service "prometheus-pushgateway" "any" | byTag }}{{ if $tag }}
+  target_group: {
+    labels: {
+      label: {
+        name:  "tag"
+        value: "{{ $tag }}"
+      }
+    }
+    {{ range $services }}target: "http://{{ .Address }}:{{ .Port }}/metrics"
+    {{ end }}
+  }{{ end }}{{ end }}
+}
+
+job: {
+  name: "alertmanager"
+  scrape_interval: "60s"
+  {{ range $tag, $services := service "prometheus-alertmanager" "any" | byTag }}{{ if $tag }}
+  target_group: {
+    labels: {
+      label: {
+        name:  "tag"
+        value: "{{ $tag }}"
+      }
+    }
+    {{ range $services }}target: "http://{{ .Address }}:{{ .Port }}/metrics"
+    {{ end }}
+  }{{ end }}{{ end }}
+}

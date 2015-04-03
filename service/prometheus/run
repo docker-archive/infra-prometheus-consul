@@ -1,0 +1,8 @@
+#!/bin/sh
+exec 2>&1
+exec /go/src/github.com/prometheus/prometheus/prometheus \
+     -config.file=/etc/prometheus.conf \
+     -storage.local.path=/prometheus/metrics \
+     -web.console.libraries=/etc/prometheus/console_libraries \
+     -web.console.templates=/etc/prometheus/consoles \
+     $PROMETHEUS_OPTS

@@ -1,0 +1,4 @@
+#!/bin/sh
+exec 2>&1
+exec /usr/bin/consul-template -consul $CONSUL \
+  -template="/etc/prometheus.conf.tmpl:/etc/prometheus.conf:sv restart prometheus"
