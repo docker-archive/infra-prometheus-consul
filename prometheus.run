@@ -1,6 +1,7 @@
 #!/bin/sh
+SERVICE="/etc/service/prometheus"
 
-/usr/bin/runsv /etc/service/prometheus &
+/sbin/runsv "$SERVICE" &
 RUNSV=$!
 
 # We need to stop runsv so it stops prometheus gracefully
@@ -8,6 +9,6 @@ trap "kill $RUNSV; wait $RUNSV" TERM INT
 
 # consul needs to run backgrounded, otherwise shell won't handle signals
 /usr/bin/consul-template \
-    -template="/etc/prometheus.conf.tmpl:/etc/prometheus.conf:sv restart prometheus" $@ &
+    -template="/etc/prometheus.conf.tmpl:/etc/prometheus.conf:sv restart $SERVICE" $@ &
 
 wait $! $RUNSV

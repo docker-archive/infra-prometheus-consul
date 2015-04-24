@@ -35,7 +35,7 @@ Yo pass command line arguments to prometheus, you can set them via the
 PROMETHEUS_OPTS env variable:
 
     $ docker run -e PROMETHEUS_OPTS="-alertmanager.url=http://alarm:9095" \
-                 dckr/prometheus-consul -consul consul:8500
+                 -p 9090:9090 dckr/prometheus-consul -consul consul:8500
 
 To customize the config template itself or the console templates,
 create a new directory with the following files (all optional):
