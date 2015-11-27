@@ -1,4 +1,7 @@
-# prometheus-consul
+# THIS IS DEPRECATED
+Prometheus now has [native consul support](http://prometheus.io/docs/operating/configuration/#consul-sd-configurations-consul_sd_config) which is the better option than using this docker image.
+
+## prometheus-consul
 
 This Docker image run prometheus along with consul-template to update
 the prometheus config. It adds job, if found, for the following
